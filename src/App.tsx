@@ -1,7 +1,24 @@
 import React from 'react';
 import { ShoppingCart, Menu, X, ArrowRight, Twitter, Instagram, Twitch, ShieldCheck, Zap, Award, Keyboard, Mouse, Headset, Gamepad2, ChevronDown } from 'lucide-react';
 
-// --- Komponen Glow Cursor (Baru) ---
+// --- Komponen Logo SVG ---
+const LogoIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" className="mr-3">
+    <defs>
+      <linearGradient id="grad_icon_only" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style={{stopColor:"#A855F7", stopOpacity:1}} />
+        <stop offset="100%" style={{stopColor:"#EC4899", stopOpacity:1}} />
+      </linearGradient>
+    </defs>
+    <g>
+      <path d="M20 2 L38 20 L20 38 L2 20 Z" stroke="url(#grad_icon_only)" strokeWidth="3.5" fill="none"/>
+      <path d="M20 12 L28 20 L20 28 L12 20 Z" fill="#FFFFFF"/>
+    </g>
+  </svg>
+);
+
+
+// --- Komponen Glow Cursor ---
 const GlowCursor = () => {
   const [position, setPosition] = React.useState({ x: -100, y: -100 });
 
@@ -18,16 +35,16 @@ const GlowCursor = () => {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-30 transition duration-300 hidden lg:block"
+      className="pointer-events-none fixed inset-0 z-50 transition duration-300 hidden lg:block"
       style={{
-        background: `radial-gradient(600px at ${position.x}px ${position.y}px, rgba(236, 72, 153, 0.1), transparent 80%)`,
+        background: `radial-gradient(circle 500px at ${position.x}px ${position.y}px, rgba(168, 85, 247, 0.25), transparent 80%)`,
       }}
     />
   );
 };
 
 
-// --- Komponen Wrapper untuk Animasi Scroll (Baru) ---
+// --- Komponen Wrapper untuk Animasi Scroll ---
 const AnimatedSection = ({ children, className }) => {
   const ref = React.useRef(null);
   const [isVisible, setIsVisible] = React.useState(false);
@@ -37,13 +54,13 @@ const AnimatedSection = ({ children, className }) => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(entry.target); // Animate only once
+          observer.unobserve(entry.target);
         }
       },
       {
         root: null,
         rootMargin: '0px',
-        threshold: 0.1 // Trigger when 10% of the element is visible
+        threshold: 0.1
       }
     );
 
@@ -96,15 +113,23 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   // --- Style untuk animasi custom ---
-  const CustomStyles = () => ( <style>{` @keyframes gradient-x { 0%, 100% { background-position: left center; } 50% { background-position: right center; } } .animate-gradient-x:hover { animation: gradient-x 2s ease infinite; } `}</style> );
+  const CustomStyles = () => ( 
+    <style>{`
+      @keyframes gradient-x { 0%, 100% { background-position: left center; } 50% { background-position: right center; } } 
+      .animate-gradient-x:hover { animation: gradient-x 2s ease infinite; }
+    `}</style> 
+  );
 
   // --- Header dan Navigasi ---
   const Header = () => (
-    <header className="fixed top-0 left-0 right-0 bg-black/50 backdrop-blur-lg border-b border-gray-800 z-50">
+    <header className="fixed top-0 left-0 right-0 bg-black/50 backdrop-blur-lg border-b border-gray-800 z-40">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <a href="#" className="text-2xl font-bold tracking-wider">
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">OneTap</span>
-          <span className="text-white">Store</span>
+        <a href="#" className="flex items-center text-2xl font-bold tracking-wider">
+          <LogoIcon />
+          <span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">OneTap</span>
+            <span className="text-white">Store</span>
+          </span>
         </a>
         <nav className="hidden md:flex items-center space-x-8">
           <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors duration-300">Home</a>
@@ -123,36 +148,47 @@ export default function App() {
     </header>
   );
 
-  // --- Hero Section ---
-  const HeroSection = () => (
-      <section className="relative min-h-screen flex items-center bg-black overflow-hidden pt-20">
-        <div className="container mx-auto px-6 relative z-10 grid md:grid-cols-2 gap-8 items-center">
-          <div className="text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tighter leading-tight">Level Up Your Setup,<span className="mt-2 block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-[length:200%_auto] animate-gradient-x">Conquer The Arena.</span></h1>
-            <p className="mt-6 max-w-lg mx-auto md:mx-0 text-lg text-gray-400">Peralatan gaming premium yang dirancang untuk performa, presisi, dan kemenangan mutlak.</p>
-            <button className="mt-10 px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg text-lg transform hover:scale-105 transition-all duration-300 shadow-lg shadow-pink-500/40 hover:shadow-xl hover:shadow-purple-500/60 flex items-center mx-auto md:mx-0">Explore Collection <ArrowRight className="ml-2" /></button>
-          </div>
-          <div className="hidden md:block group">
-            <div className="relative w-full max-w-md h-96 transition-transform duration-300 ease-out group-hover:scale-105">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/50 to-pink-600/50 rounded-3xl transform -rotate-6 transition-transform duration-500 group-hover:-rotate-12"></div>
-              <img src="https://placehold.co/600x400/111111/f0f?text=Gaming+Setup" alt="Featured Gaming Gear" className="relative w-full h-full object-cover rounded-3xl shadow-2xl shadow-purple-900/40" />
+  // --- Hero Section (Dirombak Total, tanpa floating products) ---
+  const HeroSection = () => {
+    return (
+        <section className="relative h-screen flex flex-col justify-center items-center bg-black text-center overflow-hidden">
+            {/* Gradien Latar Belakang */}
+            <div className="absolute inset-0 z-0 bg-gradient-to-b from-black via-purple-900/40 to-black"></div>
+
+            {/* Konten Utama */}
+            <div className="relative z-20 container mx-auto px-6">
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter drop-shadow-2xl">
+                    One Tap Away
+                </h1>
+                <h2 className="mt-4 text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+                    From Victory
+                </h2>
+                <p className="mt-8 max-w-xl mx-auto text-lg text-gray-300">
+                    Precision-engineered gaming gear for the aspiring champion.
+                </p>
+                <button className="mt-12 px-10 py-5 bg-white text-black font-bold rounded-lg text-xl transform hover:scale-105 transition-all duration-300 shadow-lg shadow-white/30 hover:shadow-2xl hover:shadow-white/50">
+                    Shop Now <ArrowRight className="inline-block ml-2" />
+                </button>
             </div>
-          </div>
-        </div>
-      </section>
-  );
+             {/* Indikator scroll ke bawah */}
+            <div className="absolute bottom-10 z-20 text-white animate-bounce">
+                <ChevronDown size={32} />
+            </div>
+        </section>
+    );
+  };
 
   // --- Bagian Kategori ---
   const CategorySection = () => ( <AnimatedSection className="py-20 bg-black"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">Shop by Category</h2><div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">{categories.map((category) => (<div key={category.name} className="group relative text-center bg-gray-900/50 border border-gray-800 p-8 rounded-xl hover:border-pink-500 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_20px_theme(colors.pink.500/0.4)]"><div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div><div className="relative flex justify-center items-center text-purple-400 group-hover:text-pink-400 transition-colors duration-300 mb-4">{category.icon}</div><h3 className="relative text-lg font-bold text-white">{category.name}</h3></div>))}</div></div></AnimatedSection>);
   
   // --- Bagian Produk Unggulan ---
-  const FeaturedProductsSection = () => ( <AnimatedSection className="py-20 bg-gray-900/40"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-2">Featured Gear</h2><p className="text-center text-gray-400 mb-12">Pilihan terbaik dari para pro-player.</p><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">{featuredProducts.map((product) => (<div key={product.id} className="group relative bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_25px_theme(colors.purple.600/0.5)]"><div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div><img src={product.image} alt={product.name} className="w-full h-56 object-cover" onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/600x400/1a1a1a/f0f?text=Error'; }} /><div className="p-5 relative"><h3 className="text-lg font-bold text-white mb-2">{product.name}</h3><div className="flex justify-between items-center mb-4"><p className="text-xl font-semibold text-pink-400">{product.price}</p><StarRating rating={product.rating} /></div><button className="w-full py-2.5 bg-gray-800 text-white font-semibold rounded-lg border border-gray-700 hover:bg-purple-600 hover:border-purple-600 transition-colors duration-300">Add to Cart</button></div></div>))}</div></div></AnimatedSection>);
+  const FeaturedProductsSection = () => ( <AnimatedSection className="py-20 bg-black"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-2">Featured Gear</h2><p className="text-center text-gray-400 mb-12">Pilihan terbaik dari para pro-player.</p><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">{featuredProducts.map((product) => (<div key={product.id} className="group relative bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_25px_theme(colors.purple.600/0.5)]"><div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div><img src={product.image} alt={product.name} className="w-full h-56 object-cover" onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/600x400/1a1a1a/f0f?text=Error'; }} /><div className="p-5 relative"><h3 className="text-lg font-bold text-white mb-2">{product.name}</h3><div className="flex justify-between items-center mb-4"><p className="text-xl font-semibold text-pink-400">{product.price}</p><StarRating rating={product.rating} /></div><button className="w-full py-2.5 bg-gray-800 text-white font-semibold rounded-lg border border-gray-700 hover:bg-purple-600 hover:border-purple-600 transition-colors duration-300">Add to Cart</button></div></div>))}</div></div></AnimatedSection>);
 
   // --- Bagian "Why Choose Us" ---
   const WhyChooseUsSection = () => ( <AnimatedSection className="py-20 bg-black"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">The OneTapStore Advantage</h2><div className="grid md:grid-cols-3 gap-8 text-center"><div className="border border-gray-800 p-8 rounded-lg transition-all hover:border-purple-500/50 hover:shadow-[0_0_15px_theme(colors.purple.500/0.3)]"><div className="flex justify-center mb-4"><Award size={40} className="text-purple-400"/></div><h3 className="text-xl font-bold text-white mb-2">Pro-Grade Quality</h3><p className="text-gray-400">Setiap produk diuji ketahanannya untuk memastikan performa maksimal.</p></div><div className="border border-pink-500/50 p-8 rounded-lg bg-pink-500/5 transition-all shadow-pink-500/10 hover:shadow-xl hover:shadow-pink-500/30"><div className="flex justify-center mb-4"><Zap size={40} className="text-pink-400"/></div><h3 className="text-xl font-bold text-white mb-2">Lightning-Fast Shipping</h3><p className="text-gray-400">Dapatkan gear barumu lebih cepat dan kembali ke permainan tanpa delay.</p></div><div className="border border-gray-800 p-8 rounded-lg transition-all hover:border-purple-500/50 hover:shadow-[0_0_15px_theme(colors.purple.500/0.3)]"><div className="flex justify-center mb-4"><ShieldCheck size={40} className="text-purple-400"/></div><h3 className="text-xl font-bold text-white mb-2">Guaranteed & Supported</h3><p className="text-gray-400">Garansi resmi dan dukungan pelanggan 24/7 siap membantumu.</p></div></div></div></AnimatedSection>);
   
   // --- Bagian Testimoni ---
-  const TestimonialsSection = () => ( <AnimatedSection className="py-20 bg-gray-900/40"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">What Gamers Are Saying</h2><div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">{testimonials.map((testimonial, index) => (<div key={index} className="bg-gray-900/50 border border-gray-800 p-8 rounded-xl transition-all hover:border-pink-500/30 hover:shadow-[0_0_15px_theme(colors.pink.500/0.2)]"><StarRating rating={testimonial.rating} /><p className="text-gray-300 my-4 text-lg">"{testimonial.quote}"</p><p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">- {testimonial.name}</p></div>))}</div></div></AnimatedSection>);
+  const TestimonialsSection = () => ( <AnimatedSection className="py-20 bg-black"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">What Gamers Are Saying</h2><div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">{testimonials.map((testimonial, index) => (<div key={index} className="bg-gray-900/50 border border-gray-800 p-8 rounded-xl transition-all hover:border-pink-500/30 hover:shadow-[0_0_15px_theme(colors.pink.500/0.2)]"><StarRating rating={testimonial.rating} /><p className="text-gray-300 my-4 text-lg">"{testimonial.quote}"</p><p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">- {testimonial.name}</p></div>))}</div></div></AnimatedSection>);
 
   // --- Bagian New Arrivals ---
   const NewArrivalsSection = () => (
@@ -174,7 +210,7 @@ export default function App() {
 
   // --- Bagian CTA ---
   const CtaSection = () => (
-    <AnimatedSection className="py-20 bg-gray-900/40">
+    <AnimatedSection className="py-20 bg-black">
         <div className="container mx-auto px-6 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white">Join The <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">Elite</span></h2>
             <p className="text-gray-400 mt-4 max-w-2xl mx-auto">Dapatkan akses eksklusif ke diskon, info produk baru, dan konten khusus gamer dengan bergabung di newsletter kami.</p>
@@ -210,7 +246,7 @@ export default function App() {
   }
 
   // --- Footer ---
-  const Footer = () => ( <footer className="bg-gray-900/50 border-t border-gray-800 text-gray-400"><div className="container mx-auto px-6 py-12"><div className="grid grid-cols-1 md:grid-cols-4 gap-8"><div className="md:col-span-1"><a href="#" className="text-2xl font-bold tracking-wider"><span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">OneTap</span><span className="text-white">Store</span></a><p className="mt-4 text-sm">Your ultimate destination for professional gaming equipment.</p><div className="flex space-x-4 mt-6"><a href="#" className="hover:text-pink-400"><Twitter/></a><a href="#" className="hover:text-pink-400"><Instagram/></a><a href="#" className="hover:text-pink-400"><Twitch/></a></div></div><div><h4 className="font-bold text-white mb-4">Shop</h4><ul className="space-y-2"><li><a href="#" className="hover:text-white">Keyboards</a></li><li><a href="#" className="hover:text-white">Mice</a></li><li><a href="#" className="hover:text-white">Headsets</a></li><li><a href="#" className="hover:text-white">Controllers</a></li></ul></div><div><h4 className="font-bold text-white mb-4">Support</h4><ul className="space-y-2"><li><a href="#" className="hover:text-white">Contact Us</a></li><li><a href="#" className="hover:text-white">FAQ</a></li><li><a href="#" className="hover:text-white">Shipping</a></li><li><a href="#" className="hover:text-white">Warranty</a></li></ul></div><div><h4 className="font-bold text-white mb-4">Stay Connected</h4><p className="mb-4">Get the latest deals and new product announcements.</p><form><div className="flex"><input type="email" placeholder="Your email" className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-white"/><button className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-r-md transition-colors">&rarr;</button></div></form></div></div><div className="mt-12 pt-8 border-t border-gray-800 text-center text-sm"><p>&copy; {new Date().getFullYear()} OneTapStore. All Rights Reserved. A concept by Gemini.</p></div></div></footer>);
+  const Footer = () => ( <footer className="bg-gray-900/50 border-t border-gray-800 text-gray-400"><div className="container mx-auto px-6 py-12"><div className="grid grid-cols-1 md:grid-cols-4 gap-8"><div className="md:col-span-1"><a href="#" className="flex items-center text-2xl font-bold tracking-wider"><LogoIcon/><span><span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">OneTap</span><span className="text-white">Store</span></span></a><p className="mt-4 text-sm">Your ultimate destination for professional gaming equipment.</p><div className="flex space-x-4 mt-6"><a href="#" className="hover:text-pink-400"><Twitter/></a><a href="#" className="hover:text-pink-400"><Instagram/></a><a href="#" className="hover:text-pink-400"><Twitch/></a></div></div><div><h4 className="font-bold text-white mb-4">Shop</h4><ul className="space-y-2"><li><a href="#" className="hover:text-white">Keyboards</a></li><li><a href="#" className="hover:text-white">Mice</a></li><li><a href="#" className="hover:text-white">Headsets</a></li><li><a href="#" className="hover:text-white">Controllers</a></li></ul></div><div><h4 className="font-bold text-white mb-4">Support</h4><ul className="space-y-2"><li><a href="#" className="hover:text-white">Contact Us</a></li><li><a href="#" className="hover:text-white">FAQ</a></li><li><a href="#" className="hover:text-white">Shipping</a></li><li><a href="#" className="hover:text-white">Warranty</a></li></ul></div><div><h4 className="font-bold text-white mb-4">Stay Connected</h4><p className="mb-4">Get the latest deals and new product announcements.</p><form><div className="flex"><input type="email" placeholder="Your email" className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-white"/><button className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-r-md transition-colors">&rarr;</button></div></form></div></div><div className="mt-12 pt-8 border-t border-gray-800 text-center text-sm"><p>&copy; {new Date().getFullYear()} OneTapStore. All Rights Reserved. </p></div></div></footer>);
 
   // --- Render Semua Komponen ---
   return (
