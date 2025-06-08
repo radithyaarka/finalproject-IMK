@@ -1,0 +1,234 @@
+import React from 'react';
+import { ShoppingCart, Menu, X, ArrowRight, Twitter, Instagram, Twitch, ShieldCheck, Zap, Award, Keyboard, Mouse, Headset, Gamepad2, ChevronDown } from 'lucide-react';
+
+// --- Komponen Glow Cursor (Baru) ---
+const GlowCursor = () => {
+  const [position, setPosition] = React.useState({ x: -100, y: -100 });
+
+  React.useEffect(() => {
+    const handleMouseMove = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  return (
+    <div
+      className="pointer-events-none fixed inset-0 z-30 transition duration-300 hidden lg:block"
+      style={{
+        background: `radial-gradient(600px at ${position.x}px ${position.y}px, rgba(236, 72, 153, 0.1), transparent 80%)`,
+      }}
+    />
+  );
+};
+
+
+// --- Komponen Wrapper untuk Animasi Scroll (Baru) ---
+const AnimatedSection = ({ children, className }) => {
+  const ref = React.useRef(null);
+  const [isVisible, setIsVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target); // Animate only once
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1 // Trigger when 10% of the element is visible
+      }
+    );
+
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  return (
+    <section
+      ref={ref}
+      className={`${className} transition-all duration-1000 ease-in-out transform ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+      }`}
+    >
+      {children}
+    </section>
+  );
+};
+
+
+// --- Komponen untuk Ikon Bintang (Rating Produk) ---
+const StarRating = ({ rating }) => (
+  <div className="flex items-center">
+    {[...Array(5)].map((_, i) => (
+      <svg key={i} className={`w-4 h-4 ${i < rating ? 'text-yellow-400' : 'text-gray-600'}`} fill="currentColor" viewBox="0 0 20 20">
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.446a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.368-2.446a1 1 0 00-1.175 0l-3.368 2.446c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.07 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z" />
+      </svg>
+    ))}
+  </div>
+);
+
+// --- Data Dummy ---
+const featuredProducts = [ { id: 1, name: 'Keyboard "Aura Glow"', price: 'Rp 1.250.000', rating: 5, image: 'https://placehold.co/600x400/1a1a1a/f0f?text=Keyboard' }, { id: 2, name: 'Mouse "Cyberion X"', price: 'Rp 850.000', rating: 4, image: 'https://placehold.co/600x400/1a1a1a/f0f?text=Mouse' }, { id: 3, name: 'Headset "Sonic Rift"', price: 'Rp 1.500.000', rating: 5, image: 'https://placehold.co/600x400/1a1a1a/f0f?text=Headset' }, { id: 4, name: 'Mousepad "Nexus Glide"', price: 'Rp 450.000', rating: 4, image: 'https://placehold.co/600x400/1a1a1a/f0f?text=Mousepad' },];
+const newArrivals = [ { id: 5, name: 'Webcam "Streamer Pro"', price: 'Rp 1.800.000', rating: 5, image: 'https://placehold.co/600x400/111/fff?text=Webcam' }, { id: 6, name: 'Gaming Chair "ThroneX"', price: 'Rp 3.500.000', rating: 5, image: 'https://placehold.co/600x400/111/fff?text=Gaming+Chair' },];
+const categories = [ { name: 'Keyboards', icon: <Keyboard size={40} /> }, { name: 'Mice', icon: <Mouse size={40} /> }, { name: 'Headsets', icon: <Headset size={40} /> }, { name: 'Controllers', icon: <Gamepad2 size={40} /> },];
+const testimonials = [ { name: 'ZuxxyGaming', quote: '"Gear dari sini bikin aim auto-nempel! Kualitasnya juara, desainnya keren abis."', rating: 5 }, { name: 'ScarletFTW', quote: '"Keyboard mekanikalnya responsif banget, cocok buat game kompetitif. Highly recommended!"', rating: 5 },];
+const faqs = [ { q: 'Berapa lama waktu pengiriman?', a: 'Untuk Jabodetabek, pengiriman biasanya memakan waktu 1-2 hari kerja. Untuk kota lain, estimasi 2-5 hari kerja tergantung lokasi.' }, { q: 'Apakah ada garansi untuk produk?', a: 'Ya, semua produk kami memiliki garansi resmi dari produsen selama 1 tahun. Kerusakan akibat kesalahan pengguna tidak termasuk dalam garansi.' }, { q: 'Bagaimana cara melakukan klaim garansi?', a: 'Anda bisa menghubungi tim support kami melalui email atau WhatsApp dengan menyertakan bukti pembelian dan video unboxing produk.' }, { q: 'Apakah saya bisa mengembalikan produk?', a: 'Produk dapat dikembalikan dalam waktu 7 hari setelah diterima jika terdapat cacat produksi, dengan syarat kondisi produk masih seperti baru dan kemasan lengkap.' },];
+
+
+// --- Komponen Utama Aplikasi ---
+export default function App() {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  // --- Style untuk animasi custom ---
+  const CustomStyles = () => ( <style>{` @keyframes gradient-x { 0%, 100% { background-position: left center; } 50% { background-position: right center; } } .animate-gradient-x:hover { animation: gradient-x 2s ease infinite; } `}</style> );
+
+  // --- Header dan Navigasi ---
+  const Header = () => (
+    <header className="fixed top-0 left-0 right-0 bg-black/50 backdrop-blur-lg border-b border-gray-800 z-50">
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" className="text-2xl font-bold tracking-wider">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">OneTap</span>
+          <span className="text-white">Store</span>
+        </a>
+        <nav className="hidden md:flex items-center space-x-8">
+          <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors duration-300">Home</a>
+          <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors duration-300">Products</a>
+          <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors duration-300">Deals</a>
+          <a href="#" className="text-gray-300 hover:text-pink-400 transition-colors duration-300">About</a>
+        </nav>
+        <div className="flex items-center space-x-4">
+          <button className="text-gray-300 hover:text-white relative"><ShoppingCart size={24} /><span className="absolute -top-2 -right-2 w-5 h-5 bg-pink-500 text-white text-xs rounded-full flex items-center justify-center">3</span></button>
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden text-white">{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
+        </div>
+      </div>
+      {isMenuOpen && (
+        <div className="md:hidden bg-black/80 backdrop-blur-xl"><nav className="flex flex-col items-center space-y-6 py-8"><a href="#" className="text-gray-200 hover:text-pink-400 text-lg">Home</a><a href="#" className="text-gray-200 hover:text-pink-400 text-lg">Products</a><a href="#" className="text-gray-200 hover:text-pink-400 text-lg">Deals</a><a href="#" className="text-gray-200 hover:text-pink-400 text-lg">About</a></nav></div>
+      )}
+    </header>
+  );
+
+  // --- Hero Section ---
+  const HeroSection = () => (
+      <section className="relative min-h-screen flex items-center bg-black overflow-hidden pt-20">
+        <div className="container mx-auto px-6 relative z-10 grid md:grid-cols-2 gap-8 items-center">
+          <div className="text-center md:text-left">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tighter leading-tight">Level Up Your Setup,<span className="mt-2 block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-[length:200%_auto] animate-gradient-x">Conquer The Arena.</span></h1>
+            <p className="mt-6 max-w-lg mx-auto md:mx-0 text-lg text-gray-400">Peralatan gaming premium yang dirancang untuk performa, presisi, dan kemenangan mutlak.</p>
+            <button className="mt-10 px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg text-lg transform hover:scale-105 transition-all duration-300 shadow-lg shadow-pink-500/40 hover:shadow-xl hover:shadow-purple-500/60 flex items-center mx-auto md:mx-0">Explore Collection <ArrowRight className="ml-2" /></button>
+          </div>
+          <div className="hidden md:block group">
+            <div className="relative w-full max-w-md h-96 transition-transform duration-300 ease-out group-hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-600/50 to-pink-600/50 rounded-3xl transform -rotate-6 transition-transform duration-500 group-hover:-rotate-12"></div>
+              <img src="https://placehold.co/600x400/111111/f0f?text=Gaming+Setup" alt="Featured Gaming Gear" className="relative w-full h-full object-cover rounded-3xl shadow-2xl shadow-purple-900/40" />
+            </div>
+          </div>
+        </div>
+      </section>
+  );
+
+  // --- Bagian Kategori ---
+  const CategorySection = () => ( <AnimatedSection className="py-20 bg-black"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">Shop by Category</h2><div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">{categories.map((category) => (<div key={category.name} className="group relative text-center bg-gray-900/50 border border-gray-800 p-8 rounded-xl hover:border-pink-500 hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_20px_theme(colors.pink.500/0.4)]"><div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div><div className="relative flex justify-center items-center text-purple-400 group-hover:text-pink-400 transition-colors duration-300 mb-4">{category.icon}</div><h3 className="relative text-lg font-bold text-white">{category.name}</h3></div>))}</div></div></AnimatedSection>);
+  
+  // --- Bagian Produk Unggulan ---
+  const FeaturedProductsSection = () => ( <AnimatedSection className="py-20 bg-gray-900/40"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-2">Featured Gear</h2><p className="text-center text-gray-400 mb-12">Pilihan terbaik dari para pro-player.</p><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">{featuredProducts.map((product) => (<div key={product.id} className="group relative bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_25px_theme(colors.purple.600/0.5)]"><div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div><img src={product.image} alt={product.name} className="w-full h-56 object-cover" onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/600x400/1a1a1a/f0f?text=Error'; }} /><div className="p-5 relative"><h3 className="text-lg font-bold text-white mb-2">{product.name}</h3><div className="flex justify-between items-center mb-4"><p className="text-xl font-semibold text-pink-400">{product.price}</p><StarRating rating={product.rating} /></div><button className="w-full py-2.5 bg-gray-800 text-white font-semibold rounded-lg border border-gray-700 hover:bg-purple-600 hover:border-purple-600 transition-colors duration-300">Add to Cart</button></div></div>))}</div></div></AnimatedSection>);
+
+  // --- Bagian "Why Choose Us" ---
+  const WhyChooseUsSection = () => ( <AnimatedSection className="py-20 bg-black"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">The OneTapStore Advantage</h2><div className="grid md:grid-cols-3 gap-8 text-center"><div className="border border-gray-800 p-8 rounded-lg transition-all hover:border-purple-500/50 hover:shadow-[0_0_15px_theme(colors.purple.500/0.3)]"><div className="flex justify-center mb-4"><Award size={40} className="text-purple-400"/></div><h3 className="text-xl font-bold text-white mb-2">Pro-Grade Quality</h3><p className="text-gray-400">Setiap produk diuji ketahanannya untuk memastikan performa maksimal.</p></div><div className="border border-pink-500/50 p-8 rounded-lg bg-pink-500/5 transition-all shadow-pink-500/10 hover:shadow-xl hover:shadow-pink-500/30"><div className="flex justify-center mb-4"><Zap size={40} className="text-pink-400"/></div><h3 className="text-xl font-bold text-white mb-2">Lightning-Fast Shipping</h3><p className="text-gray-400">Dapatkan gear barumu lebih cepat dan kembali ke permainan tanpa delay.</p></div><div className="border border-gray-800 p-8 rounded-lg transition-all hover:border-purple-500/50 hover:shadow-[0_0_15px_theme(colors.purple.500/0.3)]"><div className="flex justify-center mb-4"><ShieldCheck size={40} className="text-purple-400"/></div><h3 className="text-xl font-bold text-white mb-2">Guaranteed & Supported</h3><p className="text-gray-400">Garansi resmi dan dukungan pelanggan 24/7 siap membantumu.</p></div></div></div></AnimatedSection>);
+  
+  // --- Bagian Testimoni ---
+  const TestimonialsSection = () => ( <AnimatedSection className="py-20 bg-gray-900/40"><div className="container mx-auto px-6"><h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">What Gamers Are Saying</h2><div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">{testimonials.map((testimonial, index) => (<div key={index} className="bg-gray-900/50 border border-gray-800 p-8 rounded-xl transition-all hover:border-pink-500/30 hover:shadow-[0_0_15px_theme(colors.pink.500/0.2)]"><StarRating rating={testimonial.rating} /><p className="text-gray-300 my-4 text-lg">"{testimonial.quote}"</p><p className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">- {testimonial.name}</p></div>))}</div></div></AnimatedSection>);
+
+  // --- Bagian New Arrivals ---
+  const NewArrivalsSection = () => (
+    <AnimatedSection className="py-20 bg-black">
+      <div className="container mx-auto px-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-2">New Arrivals</h2><p className="text-center text-gray-400 mb-12">Jadilah yang pertama memiliki gear terbaru.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 justify-center">
+          {newArrivals.map((product) => (
+            <div key={product.id} className="group relative bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden transform hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_0_25px_theme(colors.purple.600/0.5)]">
+              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <img src={product.image} alt={product.name} className="w-full h-56 object-cover" onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/600x400/1a1a1a/f0f?text=Error'; }} />
+              <div className="p-5 relative"><h3 className="text-lg font-bold text-white mb-2">{product.name}</h3><div className="flex justify-between items-center mb-4"><p className="text-xl font-semibold text-pink-400">{product.price}</p><StarRating rating={product.rating} /></div><button className="w-full py-2.5 bg-gray-800 text-white font-semibold rounded-lg border border-gray-700 hover:bg-purple-600 hover:border-purple-600 transition-colors duration-300">Add to Cart</button></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </AnimatedSection>
+  );
+
+  // --- Bagian CTA ---
+  const CtaSection = () => (
+    <AnimatedSection className="py-20 bg-gray-900/40">
+        <div className="container mx-auto px-6 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white">Join The <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">Elite</span></h2>
+            <p className="text-gray-400 mt-4 max-w-2xl mx-auto">Dapatkan akses eksklusif ke diskon, info produk baru, dan konten khusus gamer dengan bergabung di newsletter kami.</p>
+            <form className="mt-8 max-w-md mx-auto"><div className="flex"><input type="email" placeholder="Your email address" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-l-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-white"/><button className="px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-r-md transition-colors">Sign Up</button></div></form>
+        </div>
+    </AnimatedSection>
+  );
+
+  // --- Bagian FAQ ---
+  const FaqSection = () => {
+    const [openIndex, setOpenIndex] = React.useState(null);
+    const toggleFaq = (index) => { setOpenIndex(openIndex === index ? null : index); };
+    return (
+        <AnimatedSection className="py-20 bg-black">
+            <div className="container mx-auto px-6 max-w-3xl">
+                <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-12">Frequently Asked Questions</h2>
+                <div className="space-y-4">
+                    {faqs.map((faq, index) => (
+                        <div key={index} className={`border border-gray-800 rounded-lg overflow-hidden transition-all duration-300 ${openIndex === index ? 'shadow-[0_0_15px_theme(colors.pink.500/0.3)]' : ''}`}>
+                            <button onClick={() => toggleFaq(index)} className="w-full flex justify-between items-center p-5 text-left text-white font-semibold">
+                                <span>{faq.q}</span>
+                                <ChevronDown className={`transform transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-pink-400' : ''}`} />
+                            </button>
+                            <div className={`transition-all duration-500 ease-in-out ${openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className="p-5 pt-0 text-gray-400">{faq.a}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </AnimatedSection>
+    );
+  }
+
+  // --- Footer ---
+  const Footer = () => ( <footer className="bg-gray-900/50 border-t border-gray-800 text-gray-400"><div className="container mx-auto px-6 py-12"><div className="grid grid-cols-1 md:grid-cols-4 gap-8"><div className="md:col-span-1"><a href="#" className="text-2xl font-bold tracking-wider"><span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">OneTap</span><span className="text-white">Store</span></a><p className="mt-4 text-sm">Your ultimate destination for professional gaming equipment.</p><div className="flex space-x-4 mt-6"><a href="#" className="hover:text-pink-400"><Twitter/></a><a href="#" className="hover:text-pink-400"><Instagram/></a><a href="#" className="hover:text-pink-400"><Twitch/></a></div></div><div><h4 className="font-bold text-white mb-4">Shop</h4><ul className="space-y-2"><li><a href="#" className="hover:text-white">Keyboards</a></li><li><a href="#" className="hover:text-white">Mice</a></li><li><a href="#" className="hover:text-white">Headsets</a></li><li><a href="#" className="hover:text-white">Controllers</a></li></ul></div><div><h4 className="font-bold text-white mb-4">Support</h4><ul className="space-y-2"><li><a href="#" className="hover:text-white">Contact Us</a></li><li><a href="#" className="hover:text-white">FAQ</a></li><li><a href="#" className="hover:text-white">Shipping</a></li><li><a href="#" className="hover:text-white">Warranty</a></li></ul></div><div><h4 className="font-bold text-white mb-4">Stay Connected</h4><p className="mb-4">Get the latest deals and new product announcements.</p><form><div className="flex"><input type="email" placeholder="Your email" className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-white"/><button className="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-r-md transition-colors">&rarr;</button></div></form></div></div><div className="mt-12 pt-8 border-t border-gray-800 text-center text-sm"><p>&copy; {new Date().getFullYear()} OneTapStore. All Rights Reserved. A concept by Gemini.</p></div></div></footer>);
+
+  // --- Render Semua Komponen ---
+  return (
+    <div className="bg-black font-sans">
+      <CustomStyles />
+      <GlowCursor />
+      <Header />
+      <main>
+        <HeroSection />
+        <CategorySection />
+        <FeaturedProductsSection />
+        <WhyChooseUsSection />
+        <TestimonialsSection />
+        <NewArrivalsSection />
+        <CtaSection />
+        <FaqSection />
+      </main>
+      <Footer />
+    </div>
+  );
+}
