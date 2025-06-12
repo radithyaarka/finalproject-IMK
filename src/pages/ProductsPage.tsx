@@ -4,8 +4,8 @@ import { Product } from '../types';
 
 import AnimatedSection from '../components/ui/AnimatedSection';
 import StarRating from '../components/ui/StarRating';
-import CtaSection from '../components/shared/CtaSection';
-import FaqSection from '../components/shared/FAQSection.tsx';
+// import CtaSection from '../components/shared/CtaSection';
+// import FaqSection from '../components/shared/FAQSection.tsx';
 
 /**
  * Halaman untuk menampilkan semua produk yang tersedia.
@@ -36,8 +36,6 @@ const ProductsPage: React.FC = () => (
                 </div>
             </div>
         </AnimatedSection>
-        <CtaSection />
-        <FaqSection />
     </div>
 );
 

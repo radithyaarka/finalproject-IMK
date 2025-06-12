@@ -2,6 +2,7 @@ import React from 'react';
 import { Award, Zap, ShieldCheck, Gamepad2 } from 'lucide-react';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import CtaSection from '../components/shared/CtaSection';
+import SocialMediaSection from '../components/shared/SocialMediaSection.tsx';
 import { testimonials } from '../data/dummyData.tsx';
 import { Testimonial } from '../types';
 import StarRating from '../components/ui/StarRating';
@@ -80,9 +81,7 @@ const AboutPage: React.FC = () => (
                 </div>
             </div>
         </AnimatedSection>
-        <WhyChooseUsSection />
-        <TestimonialsSection />
-        <CtaSection />
+        <SocialMediaSection/> 
     </div>
 );
 

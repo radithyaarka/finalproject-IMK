@@ -1,8 +1,8 @@
 // src/data/dummyData.ts
+import React from 'react';
 
 import { Product, Category, Testimonial, FAQ, Deal } from '../types';
 import { Keyboard, Mouse, Headset, Gamepad2 } from 'lucide-react';
-import React from 'react';
 
 // --- Data Dummy ---
 export const allProducts: Product[] = [

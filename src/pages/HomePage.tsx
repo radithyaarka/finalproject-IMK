@@ -6,7 +6,7 @@ import { PageName, Product, Category, Testimonial } from '../types';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import StarRating from '../components/ui/StarRating';
 import CtaSection from '../components/shared/CtaSection.tsx';
-import FaqSection from '../components/shared/FAQSection.tsx';
+import FaqSection from '../components/shared/FaqSection.tsx';
 
 // --- Bagian-bagian yang spesifik untuk Halaman Beranda ---
 
